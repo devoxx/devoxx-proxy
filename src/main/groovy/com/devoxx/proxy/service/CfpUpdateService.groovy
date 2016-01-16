@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestClientException
-import org.springframework.web.client.RestTemplate
 
 /**
  * Created by sarbogast on 13/01/2016.
@@ -35,6 +34,8 @@ class CfpUpdateService {
     @Autowired SpeakerRepository speakerRepository
 
     @Autowired YoutubeService youtubeService
+    @Autowired CfpClientService devoxx
+    @Autowired VotingService votes
 
     List<Map<String,String>> cfpApis
 
@@ -42,9 +43,8 @@ class CfpUpdateService {
         log.info("Updating data...")
 
         try {
-            def devoxx = new RestTemplate()
             cfpApis.each { api ->
-                updateEvent(devoxx, api)
+                updateEvent(api)
             }
         } catch (Exception exc) {
             exc.printStackTrace()
@@ -54,21 +54,21 @@ class CfpUpdateService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    def updateEvent(RestTemplate devoxx, Map<String, String> api){
+    def updateEvent(Map<String, String> api){
         try {
-            CfpLinks apiConferences = devoxx.getForObject(api.url, CfpLinks.class)
+            CfpLinks apiConferences = devoxx.getConferences(api.url)
             apiConferences.links.each { link ->
-                updateConference(devoxx, link, api.youtubeChannelId)
+                updateConference(link, api.youtubeChannelId)
             }
         } catch (RestClientException exc) {
             log.error("Error when trying to load URL ${api.url}: ${exc.getMessage()}")
         }
     }
 
-    private void updateConference(RestTemplate devoxx, CfpLink link, String youtubeChannelId) {
+    private void updateConference(CfpLink link, String youtubeChannelId) {
         log.info("Processing ${link.title}...")
         try {
-            CfpConference apiConference = devoxx.getForObject(link.href, CfpConference.class)
+            CfpConference apiConference = devoxx.getConference(link.href)
             Conference conference = conferenceRepository.findByEventCode(apiConference.eventCode)
             if (conference == null) {
                 conference = new Conference(eventCode: apiConference.eventCode)
@@ -85,10 +85,10 @@ class CfpUpdateService {
 
             def schedulesEndpoint = apiConference.links.find { it.rel.endsWith("/schedules") }?.href
             try {
-                CfpLinks apiSchedules = devoxx.getForObject(schedulesEndpoint, CfpLinks.class)
+                CfpLinks apiSchedules = devoxx.getSchedules(schedulesEndpoint)
                 def scheduleLinks = apiSchedules?.links?.findAll { it.rel?.endsWith("/schedule") }
                 scheduleLinks?.each { scheduleLink ->
-                    updateSchedule(devoxx, scheduleLink, conference, youtubeChannelId)
+                    updateSchedule(scheduleLink, conference, youtubeChannelId)
                 }
             } catch (RestClientException exc) {
                 log.error("Error while accessing ${schedulesEndpoint}: ${exc.getMessage()}")
@@ -98,10 +98,10 @@ class CfpUpdateService {
         }
     }
 
-    private void updateSchedule(RestTemplate devoxx, CfpLink scheduleLink, Conference conference, String youtubeChannelId) {
+    private void updateSchedule(CfpLink scheduleLink, Conference conference, String youtubeChannelId) {
         log.info("Processing schedule ${scheduleLink.title}...")
         try {
-            def apiSchedule = devoxx.getForObject(scheduleLink.href, CfpSchedule.class)
+            CfpSchedule apiSchedule = devoxx.getSchedule(scheduleLink.href)
             def apiTalks = apiSchedule.slots?.findAll { it.talk != null }
             apiTalks.each { apiSlot ->
                 def apiTalk = apiSlot.talk
@@ -125,9 +125,9 @@ class CfpUpdateService {
                     talkRepository.save(talk)
 
                     updateTrack(apiTalk, talk)
-                    updateSpeakers(devoxx, apiTalk, talk)
+                    updateSpeakers(apiTalk, talk)
                     updateYoutube(talk, youtubeChannelId)
-                    updateVotes(devoxx, apiTalk, talk)
+                    updateVotes(apiTalk, talk)
 
                     talkRepository.save(talk)
                 } catch (NullPointerException exc) {
@@ -139,12 +139,12 @@ class CfpUpdateService {
         }
     }
 
-    private void updateVotes(RestTemplate devoxx, CfpTalk apiTalk, Talk talk) {
+    private void updateVotes(CfpTalk apiTalk, Talk talk) {
         def url = "https://api-voting.devoxx.com/${talk.conference.eventCode}/talk/${apiTalk.id}"
         try {
-            def votes = devoxx.getForObject(url, Vote.class)
-            if (votes.avg) talk.averageRating = new Double(votes.avg as double)
-            if (votes.count) talk.numberOfRatings = new Integer(votes.count as int)
+            Vote vote = votes.getVote(url.toString())
+            if (vote.avg) talk.averageRating = new Double(vote.avg as double)
+            if (vote.count) talk.numberOfRatings = new Integer(vote.count as int)
         } catch (Exception exc) {
             log.warn("Error while accessing url ${url}: ${exc.getMessage()}")
         }
@@ -177,10 +177,10 @@ class CfpUpdateService {
         }
     }
 
-    private def updateSpeakers(RestTemplate devoxx, CfpTalk apiTalk, Talk talk) {
+    private def updateSpeakers(CfpTalk apiTalk, Talk talk) {
         return apiTalk.speakers?.each { apiSpeakerLink ->
             try {
-                CfpSpeaker apiSpeaker = devoxx.getForObject(apiSpeakerLink.link.href, CfpSpeaker.class)
+                CfpSpeaker apiSpeaker = devoxx.getSpeaker(apiSpeakerLink.link.href)
                 def speaker
                 if (apiSpeaker.twitter) {
                     def twitter = apiSpeaker.twitter?.replace('@', '')
