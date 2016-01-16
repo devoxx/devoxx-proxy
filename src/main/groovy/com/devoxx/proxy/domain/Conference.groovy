@@ -1,5 +1,6 @@
 package com.devoxx.proxy.domain
 
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -18,7 +19,7 @@ class Conference {
     @NotNull String eventCode
     @NotNull String label
     String localisation
-    String[] locale
+    @ElementCollection Set<String> locale = new HashSet<>()
 
     @OneToMany(mappedBy = "conference")
     List<Talk> talks = new ArrayList<>()

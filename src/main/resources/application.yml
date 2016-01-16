@@ -9,3 +9,27 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+devoxx:
+  cfpApis:
+    -
+      url: http://cfp.devoxx.be/api/conferences
+      youtubeChannelId: UCCBVCTuk6uJrN3iFV_3vurg
+    -
+      url: http://cfp.devoxx.fr/api/conferences
+      youtubeChannelId: UCCBVCTuk6uJrN3iFV_3vurg
+    -
+      url: http://cfp.devoxx.ma/api/conferences
+      youtubeChannelId: UC6vfGtsJr5RoBQBcHg24XQw
+    -
+      url: http://cfp.devoxx.co.uk/api/conferences
+      youtubeChannelId: UCCBVCTuk6uJrN3iFV_3vurg
+    -
+      url: http://cfp.devoxx.pl/api/conferences
+      youtubeChannelId: UCCBVCTuk6uJrN3iFV_3vurg
+youtube:
+  videosReturned: 50
+logging:
+  level:
+    com:
+      devoxx:
+        proxy: INFO
