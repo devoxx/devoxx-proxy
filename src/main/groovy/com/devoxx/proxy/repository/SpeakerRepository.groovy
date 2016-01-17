@@ -15,4 +15,6 @@ interface SpeakerRepository extends CrudRepository<Speaker, Long>{
     Speaker findByBlog(String blog)
 
     Speaker findByUuid(String uuid)
+
+    List<Speaker> findAllByOrderByLastNameAsc()
 }

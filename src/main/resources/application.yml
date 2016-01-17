@@ -2,10 +2,11 @@ spring:
   thymeleaf:
     cache: false
   datasource:
-    url: jdbc:mysql://localhost/devoxx
+    url: jdbc:mysql://localhost/devoxx?useUnicode=yes&characterEncoding=UTF-8
     username: devoxx
     password: devoxx
     driver-class-name: com.mysql.jdbc.Driver
+    sql-script-encoding: UTF-8
   jpa:
     hibernate:
       ddl-auto: update
