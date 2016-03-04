@@ -32,5 +32,7 @@ class Speaker {
     @ManyToMany
     Set<Talk> talks = new HashSet<>()
 
-    String toString() { "$firstName $lastName" }
+    String toString() { fullName }
+
+    String getFullName() { "$firstName $lastName"}
 }

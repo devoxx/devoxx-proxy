@@ -33,10 +33,11 @@ class TrackService {
                                 youtubeVideoId: talk.youtubeVideoId,
                                 thumbnailUrl: talk.thumbnailUrl,
                                 conferenceEventCode: talk.conference?.eventCode,
-                                speakerUuids: talk.speakers.collect {speaker -> speaker.uuid}
+                                speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                                speakerNames: talk.speakers.collect {speaker -> speaker.fullName}
                         )
                     }
             )
-        }
+        }.findAll {track -> track.talks.size() > 0}.sort {it.title}
     }
 }
