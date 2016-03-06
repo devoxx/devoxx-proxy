@@ -6,4 +6,5 @@ package com.devoxx.proxy.youtube
 class YoutubeVideo {
     String thumbnailUrl
     String videoId
+    String duration
 }

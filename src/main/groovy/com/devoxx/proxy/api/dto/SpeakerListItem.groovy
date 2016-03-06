@@ -10,7 +10,4 @@ class SpeakerListItem {
     String lang
     String avatarUrl
     String company
-    String bio
-    String blog
-    String twitter
 }

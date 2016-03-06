@@ -9,9 +9,14 @@ import com.google.api.services.youtube.model.ResourceId
 import com.google.api.services.youtube.model.SearchListResponse
 import com.google.api.services.youtube.model.SearchResult
 import com.google.api.services.youtube.model.Thumbnail
+import com.google.api.services.youtube.model.Video
+import com.google.api.services.youtube.model.VideoListResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Service
+
+import javax.xml.datatype.DatatypeFactory
+import javax.xml.datatype.Duration
 
 /**
  * Created by sarbogast on 15/01/2016.
@@ -78,4 +83,36 @@ class YoutubeService {
         }
     }
 
+    List<YoutubeVideo> getDurationsForVideos(List<String> videoIds) {
+        List<YoutubeVideo> result = new ArrayList<>()
+
+        for(int i = 0; i < videoIds.size(); i+=50) {
+            List<String> videoIdsToQuery = videoIds.subList(i, Math.min(videoIds.size(), i+50))
+            YouTube.Videos.List videoRequest = youtube.videos().list("contentDetails");
+            videoRequest.setId(videoIdsToQuery.join(","));
+            videoRequest.setKey(apiKey);
+            VideoListResponse listResponse = videoRequest.execute();
+            List<Video> videoList = listResponse.getItems();
+            for(video in videoList){
+                Duration duration = DatatypeFactory.newInstance().newDuration(video.getContentDetails().getDuration());
+                String durationString
+                if(duration.getHours() > 0){
+                    durationString = String.format("%d:%02d:%02d", duration.getHours(), duration.getMinutes(), duration.getSeconds())
+                } else if(duration.getMinutes() > 0) {
+                    durationString = String.format("%d:%02d", duration.getMinutes(), duration.getSeconds())
+                } else {
+                    durationString = String.format("%d", duration.getSeconds())
+                }
+
+                result.add(new YoutubeVideo(videoId: video.getId(), duration: durationString))
+            }
+        }
+
+        return result
+    }
+
+    YoutubeVideo getDurationForVideo(String videoId) {
+        List<YoutubeVideo> videos = this.getDurationsForVideos([videoId])
+        return videos[0]
+    }
 }

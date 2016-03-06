@@ -10,6 +10,7 @@ import com.devoxx.proxy.repository.SpeakerRepository
 import com.devoxx.proxy.repository.TalkRepository
 import com.devoxx.proxy.repository.TrackRepository
 import com.devoxx.proxy.voting.Vote
+import com.devoxx.proxy.youtube.YoutubeVideo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,11 +47,24 @@ class CfpUpdateService {
             cfpApis.each { api ->
                 updateEvent(api)
             }
+
+            updateYoutubeDurations()
         } catch (Exception exc) {
             exc.printStackTrace()
         }
 
         log.info("Data updated!")
+    }
+
+    private void updateYoutubeDurations() {
+        List<YoutubeVideo> videos = youtubeService.getDurationsForVideos(new HashSet<String>(talkRepository.findAllByYoutubeVideoIdNotNull().collect {
+            it.youtubeVideoId
+        }).toList())
+        for (video in videos) {
+            for (talk in talkRepository.findAllByYoutubeVideoId(video.videoId)) {
+                talk.youtubeVideoDuration = video.duration
+            }
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -73,7 +87,6 @@ class CfpUpdateService {
             if (conference == null) {
                 conference = new Conference(eventCode: apiConference.eventCode)
             }
-            //Hibernate.initialize(conference.talks)
             conference.label = apiConference.label
             conference.localisation = apiConference.localisation
             String[] locale = []

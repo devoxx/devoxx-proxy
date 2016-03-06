@@ -21,10 +21,7 @@ class SpeakerService {
                     lastName: speaker.lastName,
                     lang: speaker.lang,
                     avatarUrl: speaker.avatarUrl,
-                    company: speaker.company,
-                    bio: speaker.bio,
-                    blog: speaker.blog,
-                    twitter: speaker.twitter
+                    company: speaker.company
             )
         }
     }

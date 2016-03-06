@@ -31,6 +31,7 @@ class Talk {
 
     URL thumbnailUrl
     String youtubeVideoId
+    String youtubeVideoDuration
 
     @ManyToOne Track track
     @ManyToOne Conference conference

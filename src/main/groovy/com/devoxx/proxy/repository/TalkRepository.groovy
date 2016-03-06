@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TalkRepository extends CrudRepository<Talk, Long>{
     Talk findByTalkId(String talkId)
+    List<Talk> findAllByYoutubeVideoId(String youtubeVideoId)
     List<Talk> findAllByYoutubeVideoIdNotNull()
 }
