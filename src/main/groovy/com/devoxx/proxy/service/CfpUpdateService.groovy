@@ -44,9 +44,9 @@ class CfpUpdateService {
         log.info("Updating data...")
 
         try {
-            cfpApis.each { api ->
+            /*cfpApis.each { api ->
                 updateEvent(api)
-            }
+            }*/
 
             updateYoutubeDurations()
         } catch (Exception exc) {
@@ -62,7 +62,7 @@ class CfpUpdateService {
         }).toList())
         for (video in videos) {
             for (talk in talkRepository.findAllByYoutubeVideoId(video.videoId)) {
-                talk.youtubeVideoDuration = video.duration
+                talk.youtubeVideoDurationInSeconds = video.durationInSeconds
             }
         }
     }

@@ -17,5 +17,5 @@ class TalkDetail {
     String thumbnailUrl
     String conferenceLabel
     List<SpeakerListItem> speakers
-    String duration
+    Long durationInSeconds
 }

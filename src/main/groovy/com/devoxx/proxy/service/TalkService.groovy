@@ -20,7 +20,7 @@ class TalkService {
         Talk talk = talkRepository.findByTalkId(talkId)
         if(talk == null) return null
         return new TalkDetail(
-                duration: talk.youtubeVideoDuration,
+                durationInSeconds: talk.youtubeVideoDurationInSeconds,
                 talkId: talk.talkId,
                 talkType: talk.talkType,
                 title: talk.title,
