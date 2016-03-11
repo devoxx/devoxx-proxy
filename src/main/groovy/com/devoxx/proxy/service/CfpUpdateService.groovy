@@ -44,9 +44,9 @@ class CfpUpdateService {
         log.info("Updating data...")
 
         try {
-            /*cfpApis.each { api ->
+            cfpApis.each { api ->
                 updateEvent(api)
-            }*/
+            }
 
             updateYoutubeDurations()
         } catch (Exception exc) {

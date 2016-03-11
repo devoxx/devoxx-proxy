@@ -18,6 +18,6 @@ class DevoxxProxyApplication {
 
 	@PostConstruct
 	void bootstrap() {
-		cfpUpdateService.updateData()
+		//cfpUpdateService.updateData()
 	}
 }
