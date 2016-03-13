@@ -17,4 +17,5 @@ class TalkListItem {
     String conferenceEventCode
     List<String> speakerUuids
     List<String> speakerNames
+    String trackTitle
 }

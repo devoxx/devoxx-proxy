@@ -57,7 +57,8 @@ class SpeakerService {
                             thumbnailUrl: talk.thumbnailUrl,
                             conferenceEventCode: talk.conference?.eventCode,
                             speakerUuids: talk.speakers.collect {spkr -> spkr.uuid},
-                            speakerNames: talk.speakers.collect {spkr -> spkr.fullName}
+                            speakerNames: talk.speakers.collect {spkr -> spkr.fullName},
+                            trackTitle: talk.track?.title
                     )
                 }.sort{it.title}
         )

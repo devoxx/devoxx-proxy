@@ -67,7 +67,8 @@ class TalkService {
                     youtubeVideoId: talk.youtubeVideoId,
                     thumbnailUrl: talk.thumbnailUrl,
                     conferenceEventCode: talk.conference?.eventCode,
-                    speakerUuids: talk.speakers.collect {speaker -> speaker.uuid}
+                    speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                    trackTitle: talk.track?.title
             )
         }
     }

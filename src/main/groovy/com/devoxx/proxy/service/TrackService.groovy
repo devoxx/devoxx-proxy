@@ -34,7 +34,8 @@ class TrackService {
                                 thumbnailUrl: talk.thumbnailUrl,
                                 conferenceEventCode: talk.conference?.eventCode,
                                 speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
-                                speakerNames: talk.speakers.collect {speaker -> speaker.fullName}
+                                speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
+                                trackTitle: talk.track?.title
                         )
                     }
             )
