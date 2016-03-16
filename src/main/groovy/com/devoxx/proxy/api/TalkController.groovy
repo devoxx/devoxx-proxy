@@ -31,5 +31,11 @@ class TalkController {
         if(talk == null) throw new ResourceNotFoundException(talkId)
         else return talk
     }
+
+    @RequestMapping(value = "/talks/top", method = RequestMethod.GET)
+    List<TalkListItem> getTopTalks(@RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo,
+                                   @RequestParam(name="count", required = false, defaultValue = "10") int count){
+        return talkService.getTopTalks(withVideo, count)
+    }
 }
 
