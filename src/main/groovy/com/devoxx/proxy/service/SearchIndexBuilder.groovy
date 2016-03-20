@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext
 /**
  * Created by sarbogast on 20/03/2016.
  */
-@Component
+//@Component
 class SearchIndexBuilder implements ApplicationListener{
     @PersistenceContext
     private EntityManager entityManager
@@ -22,7 +22,7 @@ class SearchIndexBuilder implements ApplicationListener{
         try {
             FullTextEntityManager fullTextEntityManager =
                     Search.getFullTextEntityManager(entityManager);
-            fullTextEntityManager.createIndexer().startAndWait();
+            fullTextEntityManager.createIndexer().startAndWait()
         } catch (InterruptedException e) {
             System.out.println(
                     "An error occurred trying to build the search index: " +

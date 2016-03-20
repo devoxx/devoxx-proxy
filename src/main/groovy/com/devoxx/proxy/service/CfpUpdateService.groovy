@@ -11,14 +11,20 @@ import com.devoxx.proxy.repository.TalkRepository
 import com.devoxx.proxy.repository.TrackRepository
 import com.devoxx.proxy.voting.Vote
 import com.devoxx.proxy.youtube.YoutubeVideo
+import org.hibernate.search.jpa.FullTextEntityManager
+import org.hibernate.search.jpa.Search
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestClientException
+
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
 
 /**
  * Created by sarbogast on 13/01/2016.
@@ -38,8 +44,12 @@ class CfpUpdateService {
     @Autowired CfpClientService devoxx
     @Autowired VotingService votes
 
+    @PersistenceContext
+    private EntityManager entityManager
+
     List<Map<String,String>> cfpApis
 
+    @Async
     void updateData() {
         log.info("Updating data...")
 
@@ -49,6 +59,8 @@ class CfpUpdateService {
             }
 
             updateYoutubeDurations()
+
+            updateSearchIndexes()
         } catch (Exception exc) {
             exc.printStackTrace()
         }
@@ -238,6 +250,16 @@ class CfpUpdateService {
             } catch (RestClientException exc) {
                 log.error("Error while accessing ${apiSpeakerLink.link.href}: ${exc.getMessage()}")
             }
+        }
+    }
+
+    private def updateSearchIndexes() {
+        try {
+            FullTextEntityManager fullTextEntityManager =
+                    Search.getFullTextEntityManager(entityManager);
+            fullTextEntityManager.createIndexer().startAndWait()
+        } catch (InterruptedException e) {
+            log.error("An error occurred trying to build the search index: " + e.toString());
         }
     }
 }
