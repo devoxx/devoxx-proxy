@@ -1,11 +1,13 @@
 package com.devoxx.proxy.domain
 
+import org.hibernate.search.annotations.ContainedIn
+import org.hibernate.search.annotations.Field
+
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToMany
-import javax.persistence.UniqueConstraint
 import javax.validation.constraints.NotNull
 
 /**
@@ -19,16 +21,17 @@ class Speaker {
 
     @NotNull String uuid
     @Column(columnDefinition = "TEXT") String bioAsHtml
-    @Column(columnDefinition = "TEXT") String bio
-    String company
-    String firstName
-    String lastName
+    @Field @Column(columnDefinition = "TEXT") String bio
+    @Field String company
+    @Field String firstName
+    @Field String lastName
     String lang
 
     URL avatarUrl
     String blog
     String twitter
 
+    @ContainedIn
     @ManyToMany
     Set<Talk> talks = new HashSet<>()
 

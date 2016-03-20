@@ -70,7 +70,7 @@ class YoutubeService {
                 if (resourceId.getKind().equals("youtube#video") && (channelId != null && channelId == singleVideo.getSnippet().getChannelId())) {
                     def youtubeVideo = new YoutubeVideo()
                     def thumbnails = singleVideo.getSnippet().getThumbnails()
-                    Thumbnail thumbnail = thumbnails.getMaxres()?:thumbnails.getDefault()
+                    Thumbnail thumbnail = thumbnails.getHigh()?:thumbnails.getDefault()
                     youtubeVideo.thumbnailUrl = thumbnail.getUrl()
                     youtubeVideo.videoId = resourceId.getVideoId()
                     return youtubeVideo

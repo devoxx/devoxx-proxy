@@ -1,5 +1,8 @@
 package com.devoxx.proxy.domain
 
+import org.hibernate.search.annotations.ContainedIn
+import org.hibernate.search.annotations.Field
+
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -17,10 +20,11 @@ class Conference {
     long id
 
     @NotNull String eventCode
-    @NotNull String label
+    @Field @NotNull String label
     String localisation
     @ElementCollection Set<String> locale = new HashSet<>()
 
+    @ContainedIn
     @OneToMany(mappedBy = "conference")
     List<Talk> talks = new ArrayList<>()
 

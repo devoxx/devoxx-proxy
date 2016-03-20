@@ -37,5 +37,10 @@ class TalkController {
                                    @RequestParam(name="count", required = false, defaultValue = "10") int count){
         return talkService.getTopTalks(withVideo, count)
     }
+
+    @RequestMapping(value = "/talks/search", method = RequestMethod.GET)
+    List<TalkListItem> searchTalks(@RequestParam(name = "q", required = true)String q, @RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo){
+        return talkService.searchTalks(q, withVideo)
+    }
 }
 

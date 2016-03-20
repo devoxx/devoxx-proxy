@@ -12,6 +12,12 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        search:
+          default:
+            directory_provider: filesystem
+            indexBase: /tmp/tvoxx/
 devoxx:
   cfpApis:
     -

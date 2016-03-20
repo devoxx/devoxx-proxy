@@ -1,5 +1,12 @@
 package com.devoxx.proxy.domain
 
+import org.hibernate.search.annotations.Analyze
+import org.hibernate.search.annotations.Boost
+import org.hibernate.search.annotations.Field
+import org.hibernate.search.annotations.Index
+import org.hibernate.search.annotations.Indexed
+import org.hibernate.search.annotations.IndexedEmbedded
+import org.hibernate.search.annotations.Store
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 import javax.annotation.Nullable
@@ -13,6 +20,7 @@ import javax.persistence.ManyToOne
 /**
  * Created by sarbogast on 13/01/2016.
  */
+@Indexed
 @Entity
 class Talk {
     @Id
@@ -20,9 +28,9 @@ class Talk {
     long id
 
     String talkId
-    String title
+    @Field(boost = @Boost(2.0f)) String title
     String talkType
-    @Column(columnDefinition = "TEXT") String summary
+    @Field @Column(columnDefinition = "TEXT") String summary
     @Column(columnDefinition = "TEXT") String summaryAsHtml
     String lang
 
@@ -33,9 +41,9 @@ class Talk {
     String youtubeVideoId
     Long youtubeVideoDurationInSeconds
 
-    @ManyToOne Track track
-    @ManyToOne Conference conference
-    @ManyToMany(mappedBy = "talks") Set<Speaker> speakers = new HashSet<>()
+    @IndexedEmbedded @ManyToOne Track track
+    @IndexedEmbedded @ManyToOne Conference conference
+    @IndexedEmbedded @ManyToMany(mappedBy = "talks") Set<Speaker> speakers = new HashSet<>()
 
     String toString() { title }
 }

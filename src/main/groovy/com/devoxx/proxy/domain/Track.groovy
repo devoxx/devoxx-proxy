@@ -1,5 +1,8 @@
 package com.devoxx.proxy.domain
 
+import org.hibernate.search.annotations.ContainedIn
+import org.hibernate.search.annotations.Field
+
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -15,8 +18,9 @@ class Track {
     long id
 
     String trackId
-    String title
+    @Field String title
 
+    @ContainedIn
     @OneToMany(mappedBy = "track")
     Set<Talk> talks = new HashSet<>()
 

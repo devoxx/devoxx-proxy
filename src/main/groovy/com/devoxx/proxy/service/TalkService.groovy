@@ -5,6 +5,7 @@ import com.devoxx.proxy.api.dto.TalkDetail
 import com.devoxx.proxy.api.dto.TalkListItem
 import com.devoxx.proxy.domain.Talk
 import com.devoxx.proxy.repository.TalkRepository
+import com.devoxx.proxy.repository.TalkSearch
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service
 class TalkService {
     @Autowired
     TalkRepository talkRepository
+
+    @Autowired
+    TalkSearch talkSearch
 
     TalkDetail findTalkByTalkId(String talkId) {
         Talk talk = talkRepository.findByTalkId(talkId)
@@ -96,6 +100,32 @@ class TalkService {
                     thumbnailUrl: talk.thumbnailUrl,
                     conferenceEventCode: talk.conference?.eventCode,
                     speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                    speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
+                    trackTitle: talk.track?.title
+            )
+        }
+    }
+
+    List<TalkListItem> searchTalks(String text, boolean withVideo) {
+        List<Talk> talks = talkSearch.search(text)
+        if(withVideo) {
+            talks = talks.findAll{talk->talk.youtubeVideoId != null}
+        }
+        return talks.collect { talk ->
+            new TalkListItem(
+                    talkId: talk.talkId,
+                    title: talk.title,
+                    summary: talk.summary,
+                    talkType: talk.talkType,
+                    trackId: talk.track?.trackId,
+                    lang: talk.lang,
+                    averageRating: talk.averageRating,
+                    numberOfRatings: talk.numberOfRatings,
+                    youtubeVideoId: talk.youtubeVideoId,
+                    thumbnailUrl: talk.thumbnailUrl,
+                    conferenceEventCode: talk.conference?.eventCode,
+                    speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                    speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
                     trackTitle: talk.track?.title
             )
         }
