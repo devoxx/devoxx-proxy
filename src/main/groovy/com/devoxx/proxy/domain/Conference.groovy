@@ -1,5 +1,6 @@
 package com.devoxx.proxy.domain
 
+import org.hibernate.search.annotations.Analyzer
 import org.hibernate.search.annotations.ContainedIn
 import org.hibernate.search.annotations.Field
 
@@ -20,7 +21,7 @@ class Conference {
     long id
 
     @NotNull String eventCode
-    @Field @NotNull String label
+    @Field(analyzer=@Analyzer(definition="ngram")) @NotNull String label
     String localisation
     @ElementCollection Set<String> locale = new HashSet<>()
 

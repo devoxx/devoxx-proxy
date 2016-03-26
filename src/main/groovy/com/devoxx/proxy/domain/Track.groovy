@@ -1,5 +1,6 @@
 package com.devoxx.proxy.domain
 
+import org.hibernate.search.annotations.Analyzer
 import org.hibernate.search.annotations.ContainedIn
 import org.hibernate.search.annotations.Field
 
@@ -18,7 +19,7 @@ class Track {
     long id
 
     String trackId
-    @Field String title
+    @Field(analyzer=@Analyzer(definition="ngram")) String title
 
     @ContainedIn
     @OneToMany(mappedBy = "track")

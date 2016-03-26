@@ -21,4 +21,11 @@ class AdminController {
         updateService.updateData()
         return "updating..."
     }
+
+    @ResponseBody
+    @RequestMapping("/reindex")
+    String reindex() {
+        updateService.reindex()
+        return "reindexing..."
+    }
 }

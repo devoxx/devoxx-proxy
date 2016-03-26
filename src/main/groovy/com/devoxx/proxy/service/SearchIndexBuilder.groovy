@@ -2,6 +2,7 @@ package com.devoxx.proxy.service
 
 import org.hibernate.search.jpa.FullTextEntityManager
 import org.hibernate.search.jpa.Search
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent
@@ -14,11 +15,11 @@ import javax.persistence.PersistenceContext
  * Created by sarbogast on 20/03/2016.
  */
 //@Component
-class SearchIndexBuilder implements ApplicationListener{
+class SearchIndexBuilder implements ApplicationListener<ApplicationReadyEvent>{
     @PersistenceContext
     private EntityManager entityManager
 
-    void onApplicationEvent(ApplicationEvent event) {
+    void onApplicationEvent(ApplicationReadyEvent event) {
         try {
             FullTextEntityManager fullTextEntityManager =
                     Search.getFullTextEntityManager(entityManager);

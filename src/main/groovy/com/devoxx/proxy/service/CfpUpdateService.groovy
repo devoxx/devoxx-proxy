@@ -68,6 +68,19 @@ class CfpUpdateService {
         log.info("Data updated!")
     }
 
+    @Async
+    void reindex() {
+        log.info("Reindexing...")
+
+        try {
+            updateSearchIndexes()
+        } catch (Exception exc) {
+            exc.printStackTrace()
+        }
+
+        log.info("Reindexed!")
+    }
+
     private void updateYoutubeDurations() {
         List<YoutubeVideo> videos = youtubeService.getDurationsForVideos(new HashSet<String>(talkRepository.findAllByYoutubeVideoIdNotNull().collect {
             it.youtubeVideoId
