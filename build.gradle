@@ -42,7 +42,6 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.hibernate:hibernate-search-orm:5.3.0.Final')
-    compile('org.hibernate:hibernate-search-analyzers:5.3.0.Final')
     //compile('org.springframework.boot:spring-boot-starter-data-rest')
 	//compile('org.springframework.data:spring-data-rest-hal-browser')
 	compile('org.springframework.boot:spring-boot-devtools')
