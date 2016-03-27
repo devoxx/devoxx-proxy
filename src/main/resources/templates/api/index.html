@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Devoxx Proxy API</title>
+
+    <!-- Bootstrap -->
+    <link href="/webjars/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/api.css" rel="stylesheet"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h1>Devoxx Proxy API</h1>
+
+        <p>This REST API is designed to centralize all the information of various Devoxx events into one single database
+        in order to ease consumption from remote frontends like smartphone, smartwatch and smartTV apps.</p>
+        <p>Every night, an automated scripts crawls all the Devoxx APIs, voting APIs and the Youtube API to gather this data
+        that you can consume using the following API</p>
+
+        <h2>Talks</h2>
+        <h3>List talks</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks?withVideo=true</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the talks from the various Devoxx events, past and future.</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+                <th>Parameter</th>
+                <th>Kind</th>
+                <th>Type</th>
+                <th>Mandatory</th>
+                <th>Possible values</th>
+                <th>Default value</th>
+                <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of TalkListItem in JSON</p>
+        <pre>
+[
+    {
+        talkId: &quot;DV15_WJD-3996&quot;,
+        title: &quot;Apps On Your Wrist&quot;,
+        summary: &quot;We will show you the same application, developed for the three most renowned smartwatch platforms, namely the Pebble, Android Wear and Apple Watch. We will show you the tools, languages, APIs and capabilities of each platform so that you can get a feel for the kind of opportunities offered by this new usage paradigm and the investment required to leverage those opportunities. Be advised there will be some C, Java and Swift in this presentation.&quot;,
+        talkType: &quot;University&quot;,
+        trackId: &quot;mobile&quot;,
+        lang: &quot;en&quot;,
+        averageRating: 3.833333,
+        numberOfRatings: 30,
+        youtubeVideoId: &quot;GVABnHK-Uzo&quot;,
+        thumbnailUrl: &quot;https://i.ytimg.com/vi/GVABnHK-Uzo/hqdefault.jpg&quot;,
+        conferenceEventCode: &quot;DV15&quot;,
+        speakerUuids: [
+            &quot;e2073879ad5df4aa55d5b7ffb4ee8b3746d0974f&quot;,
+            &quot;35074b2d9c53c2d2ccf8ffaf446f64f7f47a111d&quot;
+        ],
+        speakerNames: [
+            &quot;Sebastien Arbogast&quot;,
+            &quot;Said Eloudrhiri&quot;
+        ],
+        trackTitle: &quot;Mobile, IoT&quot;
+    }
+...
+]
+        </pre>
+
+        <h3>Talk details</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/{talkId}</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the details regarding a specific talk identified by its talkId.</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>talkId</td>
+                <td>path</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>concatenation of the conference ID, an underscore, and the ID of the talk itself, to make it unique across conferences</td>
+                <td>N/A</td>
+                <td>Identifier of the talk to load</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>A TalkDetail in JSON</p>
+        <pre>
+{
+    talkId: &quot;DV15_WJD-3996&quot;,
+    talkType: &quot;University&quot;,
+    title: &quot;Apps On Your Wrist&quot;,
+    summary: &quot;We will show you the same application, developed for the three most renowned smartwatch platforms, namely the Pebble, Android Wear and Apple Watch. We will show you the tools, languages, APIs and capabilities of each platform so that you can get a feel for the kind of opportunities offered by this new usage paradigm and the investment required to leverage those opportunities. Be advised there will be some C, Java and Swift in this presentation.&quot;,
+    summaryAsHtml: &quot;&lt;p&gt;We will show you the same application, developed for the three most renowned smartwatch platforms, namely the Pebble, Android Wear and Apple Watch. We will show you the tools, languages, APIs and capabilities of each platform so that you can get a feel for the kind of opportunities offered by this new usage paradigm and the investment required to leverage those opportunities. Be advised there will be some C, Java and Swift in this presentation.&lt;/p&gt;
+    &quot;,
+    trackTitle: &quot;Mobile, IoT&quot;,
+    lang: &quot;en&quot;,
+    averageRating: 3.833333,
+    numberOfRatings: 30,
+    youtubeVideoId: &quot;GVABnHK-Uzo&quot;,
+    thumbnailUrl: &quot;https://i.ytimg.com/vi/GVABnHK-Uzo/hqdefault.jpg&quot;,
+    conferenceLabel: &quot;Devoxx Belgium 2015, 9th-13th November&quot;,
+    speakers: [
+        {
+            uuid: &quot;e2073879ad5df4aa55d5b7ffb4ee8b3746d0974f&quot;,
+            firstName: &quot;Sebastien&quot;,
+            lastName: &quot;Arbogast&quot;,
+            lang: &quot;en&quot;,
+            avatarUrl: &quot;http://www.gravatar.com/avatar/022eb4a3f3b256ca6224d6800aec9541&quot;,
+            company: &quot;Epseelon&quot;
+        },
+        {
+            uuid: &quot;35074b2d9c53c2d2ccf8ffaf446f64f7f47a111d&quot;,
+            firstName: &quot;Said&quot;,
+            lastName: &quot;Eloudrhiri&quot;,
+            lang: &quot;fr&quot;,
+            avatarUrl: &quot;https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/4/005/062/185/2dc5b62.jpg&quot;,
+            company: &quot;Noratek&quot;
+        }
+    ],
+    durationInSeconds: 10342
+}
+        </pre>
+
+
+
+        <h3>Top rated talks</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/top/withVideo=true&amp;count=10</pre></p>
+        <h4>Description</h4>
+        <p>Loads the {count} highest rated talks with 30 votes or more (so only talks that do have a rating). You can filter
+        out talks without a youtube video link by setting withVideo to true.</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
+            </tr>
+            <tr>
+                <td>count</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Integer greater than 0</td>
+                <td>10</td>
+                <td>Number of top talks to load</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of TalkListItem in JSON</p>
+        <pre>
+[
+    {
+        talkId: &quot;DV15_IHR-9537&quot;,
+        title: &quot;Get a Taste of Lambdas and Get Addicted to Streams&quot;,
+        summary: &quot;The first thing visible in Java 8 is the lambdas, but the real power is in Streams.
+        If you're interested in immersing into lambdas and streams, this is the session for you.
+        We will start with lambda expressions, learn about how to use them and how they get implemented under the hood. Then we will swiftly move into learning about streams, the abstractions they provide, and a variety of operations we can do with them. We will conclude with a discussion  about lazy evaluations, infinite streams, and parallel collections.&quot;,
+        talkType: &quot;University&quot;,
+        trackId: &quot;java&quot;,
+        lang: &quot;en&quot;,
+        averageRating: 4.84472,
+        numberOfRatings: 161,
+        youtubeVideoId: &quot;1OpAgZvYXLQ&quot;,
+        thumbnailUrl: &quot;https://i.ytimg.com/vi/1OpAgZvYXLQ/hqdefault.jpg&quot;,
+        conferenceEventCode: &quot;DV15&quot;,
+        speakerUuids: [
+            &quot;49cba39de93b8bc6a79d7c768fd035c740c5483a&quot;
+        ],
+        speakerNames: [
+            &quot;Venkat Subramaniam&quot;
+        ],
+        trackTitle: &quot;Java, JVM, Javas SE/EE&quot;
+    }
+    ...
+]
+        </pre>
+
+
+
+        <h3>Search talks</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/search/withVideo=true&amp;q=wrist</pre></p>
+        <h4>Description</h4>
+        <p>Searches all the talks for partial or complete matches of the search term or subwords of it (starting at 3 characters), in the following fields:</p>
+        <ul>
+            <li>Talk title</li>
+            <li>Talk summary</li>
+            <li>Talk conference</li>
+            <li>Talk track</li>
+            <li>Speaker names</li>
+            <li>Speaker bios</li>
+            <li>Speaker company</li>
+        </ul>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
+            </tr>
+            <tr>
+                <td>q</td>
+                <td>query</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>N/A</td>
+                <td>N/A</td>
+                <td>Search expression</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of TalkListItem in JSON</p>
+        <pre>
+[
+    {
+        talkId: &quot;DV15_WJD-3996&quot;,
+        title: &quot;Apps On Your Wrist&quot;,
+        summary: &quot;We will show you the same application, developed for the three most renowned smartwatch platforms, namely the Pebble, Android Wear and Apple Watch. We will show you the tools, languages, APIs and capabilities of each platform so that you can get a feel for the kind of opportunities offered by this new usage paradigm and the investment required to leverage those opportunities. Be advised there will be some C, Java and Swift in this presentation.&quot;,
+        talkType: &quot;University&quot;,
+        trackId: &quot;mobile&quot;,
+        lang: &quot;en&quot;,
+        averageRating: 3.833333,
+        numberOfRatings: 30,
+        youtubeVideoId: &quot;GVABnHK-Uzo&quot;,
+        thumbnailUrl: &quot;https://i.ytimg.com/vi/GVABnHK-Uzo/hqdefault.jpg&quot;,
+        conferenceEventCode: &quot;DV15&quot;,
+        speakerUuids: [
+            &quot;e2073879ad5df4aa55d5b7ffb4ee8b3746d0974f&quot;,
+            &quot;35074b2d9c53c2d2ccf8ffaf446f64f7f47a111d&quot;
+        ],
+        speakerNames: [
+            &quot;Sebastien Arbogast&quot;,
+            &quot;Said Eloudrhiri&quot;
+        ],
+        trackTitle: &quot;Mobile, IoT&quot;
+    }
+...
+]
+        </pre>
+
+
+
+        <h2>Tracks</h2>
+        <h3>List tracks</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/tracks?withVideo=true</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the talks from the various Devoxx events, past and future, grouped by tracks, sorted alphabetically by title</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of TrackListItem in JSON</p>
+        <pre>
+[
+    {
+        trackId: &quot;archisec&quot;,
+        title: &quot;Architecture, Performance et Securit&eacute;&quot;,
+        talks: [
+            {
+                talkId: &quot;DV15_HIZ-6683&quot;,
+                title: &quot;$HOME Sweet $HOME&quot;,
+                summary: &quot;With the rise of the mobile devices, the IoT (&quot;Internet of Things&quot;) and all connected gadgets, home networks became a wild environment for all the family members. But the landscape is much broader and, today, developers must write code that will run on a multitude of different systems that do not offer the same flexibility as classic &quot;computers&quot;. In this talk, I'll explain why security is important and why we (infosec people and developers) need to work together. Then I'll review some challenges that developers could face when developing on small hardware platforms and how to decrease the risks associated to them.&quot;,
+                talkType: &quot;Conference&quot;,
+                trackId: &quot;archisec&quot;,
+                lang: &quot;en&quot;,
+                averageRating: 3.111111,
+                numberOfRatings: 18,
+                youtubeVideoId: &quot;wQfaKLD_JhM&quot;,
+                thumbnailUrl: &quot;https://i.ytimg.com/vi/wQfaKLD_JhM/hqdefault.jpg&quot;,
+                conferenceEventCode: &quot;DV15&quot;,
+                speakerUuids: [
+                    &quot;2a6d74a9b4e8b510684968ac39a108dd8254312d&quot;
+                ],
+                speakerNames: [
+                    &quot;Xavier Mertens&quot;
+                ],
+                trackTitle: &quot;Architecture, Performance et Securit&eacute;&quot;
+            },
+            {
+                talkId: &quot;DV15_KVW-1306&quot;,
+                title: &quot;Caching 101: Caching on the JVM (and beyond)&quot;,
+                summary: &quot;After numerous presentation on the JSR107, this in-depth 3 hour university session will twist the problem upside down. Instead of leading you through every aspect of the new Caching API for Java, we'll start from a real Java application, looking at its architecture, measure contention points and slowly start adding different caching patterns to it.
+                We'll look beyond the specification as well, not in terms of proprietary APIs, but in terms of different cache topologies (onheap, offheap, distributed, ...) and considerations around them when introducing caching to both an existing or architecting a new one.
+                Finally, we shall look at how different application containers and framework may affect decisions we've made during the session. &quot;,
+                talkType: &quot;University&quot;,
+                trackId: &quot;archisec&quot;,
+                lang: &quot;en&quot;,
+                averageRating: 3.271028,
+                numberOfRatings: 107,
+                youtubeVideoId: &quot;HtrU07c17JQ&quot;,
+                thumbnailUrl: &quot;https://i.ytimg.com/vi/HtrU07c17JQ/hqdefault.jpg&quot;,
+                conferenceEventCode: &quot;DV15&quot;,
+                speakerUuids: [
+                    &quot;13df3212eb1d6abc512ca9e87383a24c18be91b4&quot;,
+                    &quot;d7171cf35b79b53b2a4bb43e9bf32542f75ba5c2&quot;
+                ],
+                speakerNames: [
+                    &quot;Louis Jacomet&quot;,
+                    &quot;Alex Snaps&quot;
+                ],
+                trackTitle: &quot;Architecture, Performance et Securit&eacute;&quot;
+            }
+            ...
+        ]
+    }
+]
+        </pre>
+
+        <h2>Speakers</h2>
+        <h3>List speakers</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/speakers</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the speakers from the various Devoxx events, past and future, sorted alphabetically by last name</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns speakers who have at least one talk with a video link (youtubeVideoId != null)</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of SpeakerListItem in JSON</p>
+        <pre>
+[
+    {
+        uuid: "da5739bb235da77ab96baa203b81394c8aafd378",
+        firstName: "AMahdy",
+        lastName: "AbdElAziz",
+        lang: "fr",
+        avatarUrl: "https://lh5.googleusercontent.com/-P445kvQ8ZMs/AAAAAAAAAAI/AAAAAAAAWbU/BkYWqueZAHQ/photo.jpg",
+        company: "Vaadin"
+    },
+    {
+        uuid: "974ad68f053d38f75f4799ded6ffaafc03cfa591",
+        firstName: "Koen",
+        lastName: "Aben",
+        lang: "fr",
+        avatarUrl: "http://www.madlab.nl/wp-content/uploads/2011/04/DSC05916.jpeg",
+        company: "First8"
+    }
+    ...
+]
+        </pre>
+
+
+        <h3>Speaker details</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/speakers/{uuid}</pre></p>
+        <h4>Description</h4>
+        <p>Gets all the details of an individual speaker, identified by its uuid</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+                <th>Parameter</th>
+                <th>Kind</th>
+                <th>Type</th>
+                <th>Mandatory</th>
+                <th>Possible values</th>
+                <th>Default value</th>
+                <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>uuid</td>
+                <td>path</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>existing UUID</td>
+                <td>N/A</td>
+                <td>Unique identifier of the speaker</td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>A SpeakerDetail in JSON</p>
+        <pre>
+{
+    uuid: &quot;43ce34bea56fe72ae8953bb9d0fb435d8c9d0640&quot;,
+    firstName: &quot;Dan&quot;,
+    lastName: &quot;Allen&quot;,
+    bio: &quot;Dan is an open source advocate, community catalyst, developer, published author (Seam in Action) and internationally recognized speaker. He leads the Asciidoctor project (asciidoctor.org), serves as the community manager for Arquillian (arquillian.org) and helps promote the JVM as a polyglot Java Champion.
+
+    As one of the founders of OpenDevise, Dan works with software communities and businesses to help them discover and cultivate their open source way. (What other way is there?)
+
+    After a long conference day, you'll likely find Dan enjoying chatting about tech, docs and open source with fellow community members over a Trappist beer or Kentucky Bourbon.&quot;,
+    bioAsHtml: &quot;&lt;p&gt;Dan is an open source advocate, community catalyst, developer, published author (Seam in Action) and internationally recognized speaker. He leads the Asciidoctor project (asciidoctor.org), serves as the community manager for Arquillian (arquillian.org) and helps promote the JVM as a polyglot Java Champion.&lt;/p&gt;
+    &lt;p&gt;As one of the founders of OpenDevise, Dan works with software communities and businesses to help them discover and cultivate their open source way. (What other way is there?)&lt;/p&gt;
+    &lt;p&gt;After a long conference day, you&amp;#x27;ll likely find Dan enjoying chatting about tech, docs and open source with fellow community members over a Trappist beer or Kentucky Bourbon.&lt;/p&gt;
+    &quot;,
+    company: &quot;OpenDevise&quot;,
+    lang: &quot;fr&quot;,
+    avatarUrl: &quot;http://0.gravatar.com/avatar/dcccd96c499963133f7f95e7ffa20c4e&quot;,
+    blog: &quot;http://google.com/profiles/dan.j.allen&quot;,
+    twitter: &quot;mojavelinux&quot;,
+    talks: [
+        {
+            talkId: &quot;DV15_ZPY-2467&quot;,
+            title: &quot;7 Ways to Hack Your Brain to Write Fluently&quot;,
+            summary: &quot;Your brain can be a tyrant. It likes to hold ideas captive, leaving you to stare down the cursor against the backdrop of a blank page. We&rsquo;re going to set those ideas free and even get the brain to do your bidding.
+
+            You see, just like a computer, your brain can be hacked. We can play little tricks on it so it gives up those ideas and gets the cursor dancing across the screen. Come learn about 7 techniques I use to hack my brain so I can write fluently.
+
+            You&rsquo;ll never look at a blank page the same way again, and it won&rsquo;t be for long.&quot;,
+            talkType: &quot;Conference&quot;,
+            trackId: &quot;methodevops&quot;,
+            lang: &quot;en&quot;,
+            averageRating: 4.280702,
+            numberOfRatings: 114,
+            youtubeVideoId: &quot;r6RXRi5pBXg&quot;,
+            thumbnailUrl: &quot;https://i.ytimg.com/vi/r6RXRi5pBXg/hqdefault.jpg&quot;,
+            conferenceEventCode: &quot;DV15&quot;,
+            speakerUuids: [
+                &quot;43ce34bea56fe72ae8953bb9d0fb435d8c9d0640&quot;
+            ],
+            speakerNames: [
+                &quot;Dan Allen&quot;
+            ],
+            trackTitle: &quot;Methodology &amp; DevOps&quot;
+        }
+        ...
+    ]
+}
+        </pre>
+    </div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>

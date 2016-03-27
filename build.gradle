@@ -48,6 +48,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.webjars:bootstrap:3.3.6')
 	compile('org.springframework.boot:spring-boot-starter-cloud-connectors')
     compile("org.springframework.boot:spring-boot-starter-security")
 	optional('org.springframework.boot:spring-boot-configuration-processor')

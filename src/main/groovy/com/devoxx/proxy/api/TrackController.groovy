@@ -5,6 +5,7 @@ import com.devoxx.proxy.service.TrackService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 /**
@@ -17,7 +18,7 @@ class TrackController {
     TrackService trackService
 
     @RequestMapping(value="/tracks", method = RequestMethod.GET)
-    List<TrackListItem> index() {
-        return trackService.getTracks()
+    List<TrackListItem> index(@RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo) {
+        return trackService.getTracks(withVideo)
     }
 }

@@ -16,8 +16,8 @@ class SpeakerService {
     @Autowired
     SpeakerRepository speakerRepository
 
-    List<SpeakerListItem> getSpeakers() {
-        return speakerRepository.findAllByOrderByLastNameAsc().findAll {speaker -> speaker.talks?.size() > 0 && speaker.talks.find {talk->talk.youtubeVideoId != null}}.collect { speaker ->
+    List<SpeakerListItem> getSpeakers(boolean withVideo) {
+        return speakerRepository.findAllByOrderByLastNameAsc().findAll {speaker -> speaker.talks?.size() > 0 && speaker.talks.find {talk-> withVideo ? talk.youtubeVideoId != null : true}}.collect { speaker ->
             new SpeakerListItem(
                     uuid: speaker.uuid,
                     firstName: speaker.firstName,
