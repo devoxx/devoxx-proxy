@@ -226,11 +226,6 @@ class CfpUpdateService {
                     if (speaker == null) {
                         speaker = new Speaker(twitter: twitter)
                     }
-                } else if (apiSpeaker.blog) {
-                    speaker = speakerRepository.findByBlog(apiSpeaker.blog)
-                    if (speaker == null) {
-                        speaker = new Speaker(blog: apiSpeaker.blog)
-                    }
                 } else {
                     speaker = speakerRepository.findByUuid(apiSpeaker.uuid)
                     if (speaker == null) {
@@ -245,7 +240,11 @@ class CfpUpdateService {
                 speaker.bioAsHtml = apiSpeaker.bioAsHtml
                 speaker.company = apiSpeaker.company
                 speaker.blog = apiSpeaker.blog
-                speaker.avatarUrl = apiSpeaker.avatarURL ? new URL(apiSpeaker.avatarURL) : null
+                try {
+                    speaker.avatarUrl = apiSpeaker.avatarURL ? new URL(apiSpeaker.avatarURL) : null
+                } catch (MalformedURLException exc) {
+                    speaker.avatarUrl = null
+                }
                 speaker.lang = apiSpeaker.lang
                 speaker.twitter = apiSpeaker.twitter?.replace('@', '')
                 speakerRepository.save(speaker)
