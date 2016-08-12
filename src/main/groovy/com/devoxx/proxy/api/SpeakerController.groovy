@@ -2,7 +2,6 @@ package com.devoxx.proxy.api
 
 import com.devoxx.proxy.api.dto.SpeakerDetail
 import com.devoxx.proxy.api.dto.SpeakerListItem
-import com.devoxx.proxy.api.dto.TalkDetail
 import com.devoxx.proxy.api.exception.ResourceNotFoundException
 import com.devoxx.proxy.service.SpeakerService
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,8 +27,8 @@ class SpeakerController {
 
     @RequestMapping(value = "/speakers/{uuid}", method = RequestMethod.GET)
     SpeakerDetail get(@PathVariable("uuid") String uuid) {
-        SpeakerDetail talk = speakerService.findTalkByUuid(uuid)
-        if(talk == null) throw new ResourceNotFoundException(uuid)
-        else return talk
+        SpeakerDetail speaker = speakerService.findSpeakerByUuid(uuid)
+        if(speaker == null) throw new ResourceNotFoundException(uuid)
+        else return speaker
     }
 }

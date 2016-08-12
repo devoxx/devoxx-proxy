@@ -19,7 +19,7 @@ class SpeakerService {
     List<SpeakerListItem> getSpeakers(boolean withVideo) {
         return speakerRepository.findAllByOrderByLastNameAsc().findAll {speaker -> speaker.talks?.size() > 0 && speaker.talks.find {talk-> withVideo ? talk.youtubeVideoId != null : true}}.collect { speaker ->
             new SpeakerListItem(
-                    uuid: speaker.uuid,
+                    uuid: speaker.businessId,
                     firstName: speaker.firstName,
                     lastName: speaker.lastName,
                     lang: speaker.lang,
@@ -29,11 +29,11 @@ class SpeakerService {
         }
     }
 
-    SpeakerDetail findTalkByUuid(String uuid) {
-        Speaker speaker = speakerRepository.findByUuid(uuid)
+    SpeakerDetail findSpeakerByUuid(String uuid) {
+        Speaker speaker = speakerRepository.findByBusinessId(uuid)
         if(speaker == null) return null
         return new SpeakerDetail(
-                uuid: speaker.uuid,
+                uuid: speaker.businessId,
                 firstName: speaker.firstName,
                 lastName: speaker.lastName,
                 bio: speaker.bio,
@@ -56,7 +56,7 @@ class SpeakerService {
                             youtubeVideoId: talk.youtubeVideoId,
                             thumbnailUrl: talk.thumbnailUrl,
                             conferenceEventCode: talk.conference?.eventCode,
-                            speakerUuids: talk.speakers.collect {spkr -> spkr.uuid},
+                            speakerUuids: talk.speakers.collect {spkr -> spkr.businessId},
                             speakerNames: talk.speakers.collect {spkr -> spkr.fullName},
                             trackTitle: talk.track?.title
                     )

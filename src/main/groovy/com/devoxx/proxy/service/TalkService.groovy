@@ -40,7 +40,7 @@ class TalkService {
                 conferenceLabel: talk.conference?.label,
                 speakers: talk.speakers.collect { speaker ->
                     new SpeakerListItem(
-                            uuid: speaker.uuid,
+                            uuid: speaker.businessId,
                             firstName: speaker.firstName,
                             lastName: speaker.lastName,
                             lang: speaker.lang,
@@ -72,7 +72,7 @@ class TalkService {
                     youtubeVideoId: talk.youtubeVideoId,
                     thumbnailUrl: talk.thumbnailUrl,
                     conferenceEventCode: talk.conference?.eventCode,
-                    speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                    speakerUuids: talk.speakers.collect {speaker -> speaker.businessId},
                     speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
                     trackTitle: talk.track?.title
             )
@@ -100,7 +100,7 @@ class TalkService {
                     youtubeVideoId: talk.youtubeVideoId,
                     thumbnailUrl: talk.thumbnailUrl,
                     conferenceEventCode: talk.conference?.eventCode,
-                    speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                    speakerUuids: talk.speakers.collect {speaker -> speaker.businessId},
                     speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
                     trackTitle: talk.track?.title
             )
@@ -125,7 +125,7 @@ class TalkService {
                     youtubeVideoId: talk.youtubeVideoId,
                     thumbnailUrl: talk.thumbnailUrl,
                     conferenceEventCode: talk.conference?.eventCode,
-                    speakerUuids: talk.speakers.collect {speaker -> speaker.uuid},
+                    speakerUuids: talk.speakers.collect {speaker -> speaker.businessId},
                     speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
                     trackTitle: talk.track?.title
             )

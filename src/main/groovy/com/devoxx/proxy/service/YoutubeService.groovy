@@ -57,7 +57,7 @@ class YoutubeService {
 
         // To increase efficiency, only retrieve the fields that the
         // application uses.
-        search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/thumbnails/high/url,snippet/channelId)");
+        search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/thumbnails,snippet/channelId)");
         search.setMaxResults(videosReturned);
 
         // Call the API and print results.
@@ -69,9 +69,10 @@ class YoutubeService {
 
                 if (resourceId.getKind().equals("youtube#video") && (channelId != null && channelId == singleVideo.getSnippet().getChannelId())) {
                     def youtubeVideo = new YoutubeVideo()
-                    def thumbnails = singleVideo.getSnippet().getThumbnails()
-                    Thumbnail thumbnail = thumbnails.getHigh()?:thumbnails.getDefault()
-                    youtubeVideo.thumbnailUrl = thumbnail.getUrl()
+                    /*def thumbnails = singleVideo.getSnippet().getThumbnails()
+                    Thumbnail thumbnail = thumbnails.getMaxres()?:(thumbnails.getHigh()?:thumbnails.getDefault())
+                    youtubeVideo.thumbnailUrl = thumbnail.getUrl()*/
+                    youtubeVideo.thumbnailUrl = "http://img.youtube.com/vi/${resourceId.getVideoId()}/maxresdefault.jpg"
                     youtubeVideo.videoId = resourceId.getVideoId()
                     return youtubeVideo
                 }

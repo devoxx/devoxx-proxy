@@ -31,10 +31,10 @@ devoxx:
       youtubeChannelId: UC6vfGtsJr5RoBQBcHg24XQw
     -
       url: http://cfp.devoxx.co.uk/api/conferences
-      youtubeChannelId: UCCBVCTuk6uJrN3iFV_3vurg
+      youtubeChannelId: UCxIamwHotqAAdmecaKT9WpA
     -
       url: http://cfp.devoxx.pl/api/conferences
-      youtubeChannelId: UCCBVCTuk6uJrN3iFV_3vurg
+      youtubeChannelId: UCAu3kLPVR1KScr5BReBJTvg
 youtube:
   videosReturned: 50
 logging:
