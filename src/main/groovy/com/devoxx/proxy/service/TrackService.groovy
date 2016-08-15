@@ -15,12 +15,12 @@ class TrackService {
     @Autowired
     TrackRepository trackRepository
 
-    List<TrackListItem> getTracks(boolean withVideo) {
+    List<TrackListItem> getTracks(boolean withVideo, boolean loadTalks) {
         return trackRepository.findAll().collect { track ->
             return new TrackListItem(
                     trackId: track.trackId,
                     title: track.title,
-                    talks: track.talks?.findAll { Talk talk -> withVideo ? talk.youtubeVideoId != null : true}?.sort { it.title }?.collect { talk ->
+                    talks: loadTalks ? track.talks?.findAll { Talk talk -> withVideo ? talk.youtubeVideoId != null : true}?.sort { it.title }?.collect { talk ->
                         new TalkListItem(
                                 talkId: talk.talkId,
                                 title: talk.title,
@@ -37,8 +37,9 @@ class TrackService {
                                 speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
                                 trackTitle: talk.track?.title
                         )
-                    }
+                    } : [],
+                    numberOfTalks: track.talks?.size()
             )
-        }.findAll {track -> track.talks.size() > 0}.sort {it.title}
+        }.findAll {track -> track.numberOfTalks > 0}.sort {it.title}
     }
 }

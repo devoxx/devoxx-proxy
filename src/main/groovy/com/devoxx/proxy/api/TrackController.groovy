@@ -18,7 +18,8 @@ class TrackController {
     TrackService trackService
 
     @RequestMapping(value="/tracks", method = RequestMethod.GET)
-    List<TrackListItem> index(@RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo) {
-        return trackService.getTracks(withVideo)
+    List<TrackListItem> index(@RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo,
+                              @RequestParam(name = "loadTalks", required = false, defaultValue = "true")boolean loadTalks) {
+        return trackService.getTracks(withVideo, loadTalks)
     }
 }

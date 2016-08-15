@@ -86,6 +86,90 @@
 ]
         </pre>
 
+        <h3>List talks with pagination</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/paged/talks?withVideo=true&amp;page=2&amp;size=5</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the talks from the various Devoxx events, past and future, with pagination</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
+            </tr>
+            <tr>
+                <td>page</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Positive integer</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>size</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Positive integer</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of TalkListItem in JSON, embedded into a page structure</p>
+        <pre>
+{
+    content: [
+            {
+                talkId: &quot;DV15_WJD-3996&quot;,
+                title: &quot;Apps On Your Wrist&quot;,
+                summary: &quot;We will show you the same application, developed for the three most renowned smartwatch platforms, namely the Pebble, Android Wear and Apple Watch. We will show you the tools, languages, APIs and capabilities of each platform so that you can get a feel for the kind of opportunities offered by this new usage paradigm and the investment required to leverage those opportunities. Be advised there will be some C, Java and Swift in this presentation.&quot;,
+                talkType: &quot;University&quot;,
+                trackId: &quot;mobile&quot;,
+                lang: &quot;en&quot;,
+                averageRating: 3.833333,
+                numberOfRatings: 30,
+                youtubeVideoId: &quot;GVABnHK-Uzo&quot;,
+                thumbnailUrl: &quot;https://i.ytimg.com/vi/GVABnHK-Uzo/hqdefault.jpg&quot;,
+                conferenceEventCode: &quot;DV15&quot;,
+                speakerUuids: [
+                    &quot;e2073879ad5df4aa55d5b7ffb4ee8b3746d0974f&quot;,
+                    &quot;35074b2d9c53c2d2ccf8ffaf446f64f7f47a111d&quot;
+                ],
+                speakerNames: [
+                    &quot;Sebastien Arbogast&quot;,
+                    &quot;Said Eloudrhiri&quot;
+                ],
+                trackTitle: &quot;Mobile, IoT&quot;
+            }
+        ...
+        ],
+    last: false,
+    totalPages: 21,
+    totalElements: 216,
+    size: 20,
+    number: 0,
+    sort: null,
+    first: true,
+    numberOfElements: 20
+}
+        </pre>
+
         <h3>Talk details</h3>
         <h4>Endpoint</h4>
         <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/{talkId}</pre></p>
@@ -323,6 +407,15 @@
                 <td>false</td>
                 <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
             </tr>
+            <tr>
+                <td>loadTalks</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>true</td>
+                <td>If true, returns all the talks associated with each track, otherwise an empty list of talks for each track</td>
+            </tr>
         </table>
         <h4>Returns</h4>
         <p>An array of TrackListItem in JSON</p>
@@ -331,6 +424,7 @@
     {
         trackId: &quot;archisec&quot;,
         title: &quot;Architecture, Performance et Securit&eacute;&quot;,
+        numberOfTalks:12,
         talks: [
             {
                 talkId: &quot;DV15_HIZ-6683&quot;,
@@ -433,6 +527,83 @@
 ]
         </pre>
 
+        <h3>List speakers with pagination</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/paged/speakers?withVideo=true&amp;page=2&amp;size=5</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the speakers from the various Devoxx events, past and future, sorted alphabetically by last name, with pagination</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns speakers who have at least one talk with a video link (youtubeVideoId != null)</td>
+            </tr>
+            <tr>
+                <td>page</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Positive integer</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>size</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Positive integer</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of SpeakerListItem in JSON, embedded into a page structure</p>
+        <pre>
+{
+    content: [
+            {
+                uuid: "da5739bb235da77ab96baa203b81394c8aafd378",
+                firstName: "AMahdy",
+                lastName: "AbdElAziz",
+                lang: "fr",
+                avatarUrl: "https://lh5.googleusercontent.com/-P445kvQ8ZMs/AAAAAAAAAAI/AAAAAAAAWbU/BkYWqueZAHQ/photo.jpg",
+                company: "Vaadin"
+            },
+            {
+                uuid: "974ad68f053d38f75f4799ded6ffaafc03cfa591",
+                firstName: "Koen",
+                lastName: "Aben",
+                lang: "fr",
+                avatarUrl: "http://www.madlab.nl/wp-content/uploads/2011/04/DSC05916.jpeg",
+                company: "First8"
+            }
+            ...
+        ],
+    last: false,
+    totalPages: 21,
+    totalElements: 216,
+    size: 20,
+    number: 0,
+    sort: null,
+    first: true,
+    numberOfElements: 20
+}
+        </pre>
 
         <h3>Speaker details</h3>
         <h4>Endpoint</h4>

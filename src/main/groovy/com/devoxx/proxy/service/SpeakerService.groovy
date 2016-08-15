@@ -6,6 +6,9 @@ import com.devoxx.proxy.api.dto.TalkListItem
 import com.devoxx.proxy.domain.Speaker
 import com.devoxx.proxy.repository.SpeakerRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 /**
@@ -16,8 +19,17 @@ class SpeakerService {
     @Autowired
     SpeakerRepository speakerRepository
 
-    List<SpeakerListItem> getSpeakers(boolean withVideo) {
-        return speakerRepository.findAllByOrderByLastNameAsc().findAll {speaker -> speaker.talks?.size() > 0 && speaker.talks.find {talk-> withVideo ? talk.youtubeVideoId != null : true}}.collect { speaker ->
+    Page<SpeakerListItem> getSpeakers(boolean withVideo, Pageable pageRequest = null) {
+        List<Speaker> speakers = speakerRepository.findAllByOrderByLastNameAsc().findAll {speaker -> speaker.talks?.size() > 0 && speaker.talks.find {talk-> withVideo ? talk.youtubeVideoId != null : true}}
+
+        long totalSpeakers = speakers.size()
+
+        if(pageRequest) {
+            if(pageRequest.offset >= speakers.size()) return new PageImpl<SpeakerListItem>([], pageRequest, speakers.size())
+            speakers = speakers.subList(pageRequest.offset, Math.min(pageRequest.offset + pageRequest.pageSize, speakers.size()))
+        }
+
+        return new PageImpl<SpeakerListItem>(speakers.collect { speaker ->
             new SpeakerListItem(
                     uuid: speaker.businessId,
                     firstName: speaker.firstName,
@@ -26,7 +38,7 @@ class SpeakerService {
                     avatarUrl: speaker.avatarUrl,
                     company: speaker.company
             )
-        }
+        }, pageRequest, totalSpeakers)
     }
 
     SpeakerDetail findSpeakerByUuid(String uuid) {

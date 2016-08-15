@@ -7,7 +7,10 @@ import com.devoxx.proxy.domain.Talk
 import com.devoxx.proxy.repository.TalkRepository
 import com.devoxx.proxy.repository.TalkSearch
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 /**
@@ -51,15 +54,15 @@ class TalkService {
         )
     }
 
-    List<TalkListItem> findAllTalksWithVideo(boolean withVideo) {
-        Iterable<Talk> talks;
+    Page<TalkListItem> findAllTalksWithVideo(boolean withVideo, Pageable pageRequest = null) {
+        Page<Talk> talks;
         if(withVideo) {
-            talks = talkRepository.findAllByYoutubeVideoIdNotNull()
+            talks = talkRepository.findAllByYoutubeVideoIdNotNull(pageRequest)
         } else {
-            talks = talkRepository.findAll()
+            talks = talkRepository.findAll(pageRequest?:new PageRequest(0, Integer.MAX_VALUE))
         }
 
-        return talks.collect { talk ->
+        return new PageImpl<TalkListItem>(talks.content.collect { talk ->
             new TalkListItem(
                     talkId: talk.talkId,
                     title: talk.title,
@@ -76,7 +79,7 @@ class TalkService {
                     speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
                     trackTitle: talk.track?.title
             )
-        }
+        }, pageRequest, talks.totalElements)
     }
 
     List<TalkListItem> getTopTalks(boolean withVideo, int count) {

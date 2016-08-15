@@ -4,7 +4,11 @@ import com.devoxx.proxy.api.dto.TalkDetail
 import com.devoxx.proxy.api.dto.TalkListItem
 import com.devoxx.proxy.api.exception.ResourceNotFoundException
 import com.devoxx.proxy.service.TalkService
+import org.omg.CORBA.Request
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -22,7 +26,12 @@ class TalkController {
 
     @RequestMapping(value = "/talks", method = RequestMethod.GET)
     List<TalkListItem> index(@RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo) {
-        return talkService.findAllTalksWithVideo(withVideo)
+        return talkService.findAllTalksWithVideo(withVideo).content
+    }
+
+    @RequestMapping(value = "/paged/talks", method = RequestMethod.GET)
+    Page<TalkListItem> indexPaged(@RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo, Pageable pageRequest) {
+        return talkService.findAllTalksWithVideo(withVideo, pageRequest)
     }
 
     @RequestMapping(value = "/talks/{talkId}", method = RequestMethod.GET)

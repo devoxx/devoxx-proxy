@@ -7,4 +7,5 @@ class TrackListItem {
     String trackId
     String title
     List<TalkListItem> talks
+    int numberOfTalks
 }
