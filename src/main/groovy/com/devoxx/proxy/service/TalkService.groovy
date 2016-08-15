@@ -36,7 +36,7 @@ class TalkService {
                 averageRating: talk.averageRating,
                 numberOfRatings: talk.numberOfRatings,
                 youtubeVideoId: talk.youtubeVideoId,
-                thumbnailUrl: talk.thumbnailUrl,
+                thumbnailUrl: talk.thumbnailUrl?.toString()?.replace('hqdefault', 'maxresdefault'),
                 conferenceLabel: talk.conference?.label,
                 speakers: talk.speakers.collect { speaker ->
                     new SpeakerListItem(
@@ -98,7 +98,7 @@ class TalkService {
                     averageRating: talk.averageRating,
                     numberOfRatings: talk.numberOfRatings,
                     youtubeVideoId: talk.youtubeVideoId,
-                    thumbnailUrl: talk.thumbnailUrl,
+                    thumbnailUrl: talk.thumbnailUrl?.toString()?.replace('hqdefault', 'maxresdefault'),
                     conferenceEventCode: talk.conference?.eventCode,
                     speakerUuids: talk.speakers.collect {speaker -> speaker.businessId},
                     speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
