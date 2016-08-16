@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TalkRepository extends PagingAndSortingRepository<Talk, Long> {
     Talk findByTalkId(String talkId)
+    Page<Talk> findAllByTrackTrackId(String trackId, Pageable pageRequest)
+    Page<Talk> findAllByTrackTrackIdAndYoutubeVideoIdNotNull(String trackId, Pageable pageRequest)
     List<Talk> findAllByYoutubeVideoId(String youtubeVideoId)
     Page<Talk> findAllByYoutubeVideoIdNotNull(Pageable pageRequest)
     List<Talk> findAllByYoutubeVideoIdNotNullAndAverageRatingNotNullAndNumberOfRatingsGreaterThanEqualOrderByAverageRatingDesc(int numberOfRatings, Pageable pageable)

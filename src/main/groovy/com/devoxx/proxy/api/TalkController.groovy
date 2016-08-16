@@ -3,6 +3,7 @@ package com.devoxx.proxy.api
 import com.devoxx.proxy.api.dto.TalkDetail
 import com.devoxx.proxy.api.dto.TalkListItem
 import com.devoxx.proxy.api.exception.ResourceNotFoundException
+import com.devoxx.proxy.domain.Talk
 import com.devoxx.proxy.service.TalkService
 import org.omg.CORBA.Request
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,6 +51,11 @@ class TalkController {
     @RequestMapping(value = "/talks/search", method = RequestMethod.GET)
     List<TalkListItem> searchTalks(@RequestParam(name = "q", required = true)String q, @RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo){
         return talkService.searchTalks(q, withVideo)
+    }
+
+    @RequestMapping(value = "/paged/tracks/{trackId}/talks", method = RequestMethod.GET)
+    Page<TalkListItem> trackIndex(@PathVariable("trackId")String trackId, @RequestParam(name = "withVideo", required = false, defaultValue = "false")boolean withVideo, Pageable pageRequest) {
+        return talkService.findTalksByTrack(trackId, withVideo, pageRequest)
     }
 }
 

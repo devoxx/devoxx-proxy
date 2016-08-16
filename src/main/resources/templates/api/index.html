@@ -170,6 +170,99 @@
 }
         </pre>
 
+        <h3>List talks for a given track, with pagination</h3>
+        <h4>Endpoint</h4>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/paged/tracks/archisec/talks?withVideo=true&amp;page=2&amp;size=5</pre></p>
+        <h4>Description</h4>
+        <p>Loads all the talks for a given track, with pagination</p>
+        <h4>Parameters</h4>
+        <table class="table">
+            <thead>
+            <th>Parameter</th>
+            <th>Kind</th>
+            <th>Type</th>
+            <th>Mandatory</th>
+            <th>Possible values</th>
+            <th>Default value</th>
+            <th>Meaning</th>
+            </thead>
+            <tr>
+                <td>trackId</td>
+                <td>path</td>
+                <td>String</td>
+                <td>Yes</td>
+                <td>existing trackId</td>
+                <td>N/A</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>withVideo</td>
+                <td>query</td>
+                <td>boolean</td>
+                <td>No</td>
+                <td>true/false</td>
+                <td>false</td>
+                <td>If true, only returns talks that have a video link to Youtube (youtubeVideoId != null)</td>
+            </tr>
+            <tr>
+                <td>page</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Positive integer</td>
+                <td>0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>size</td>
+                <td>query</td>
+                <td>int</td>
+                <td>No</td>
+                <td>Positive integer</td>
+                <td>20</td>
+                <td></td>
+            </tr>
+        </table>
+        <h4>Returns</h4>
+        <p>An array of TalkListItem in JSON, embedded into a page structure</p>
+        <pre>
+{
+    content: [
+            {
+                talkId: &quot;DV15_WJD-3996&quot;,
+                title: &quot;Apps On Your Wrist&quot;,
+                summary: &quot;We will show you the same application, developed for the three most renowned smartwatch platforms, namely the Pebble, Android Wear and Apple Watch. We will show you the tools, languages, APIs and capabilities of each platform so that you can get a feel for the kind of opportunities offered by this new usage paradigm and the investment required to leverage those opportunities. Be advised there will be some C, Java and Swift in this presentation.&quot;,
+                talkType: &quot;University&quot;,
+                trackId: &quot;archisec&quot;,
+                lang: &quot;en&quot;,
+                averageRating: 3.833333,
+                numberOfRatings: 30,
+                youtubeVideoId: &quot;GVABnHK-Uzo&quot;,
+                thumbnailUrl: &quot;https://i.ytimg.com/vi/GVABnHK-Uzo/hqdefault.jpg&quot;,
+                conferenceEventCode: &quot;DV15&quot;,
+                speakerUuids: [
+                    &quot;e2073879ad5df4aa55d5b7ffb4ee8b3746d0974f&quot;,
+                    &quot;35074b2d9c53c2d2ccf8ffaf446f64f7f47a111d&quot;
+                ],
+                speakerNames: [
+                    &quot;Sebastien Arbogast&quot;,
+                    &quot;Said Eloudrhiri&quot;
+                ],
+                trackTitle: &quot;Mobile, IoT&quot;
+            }
+        ...
+        ],
+    last: false,
+    totalPages: 21,
+    totalElements: 216,
+    size: 20,
+    number: 0,
+    sort: null,
+    first: true,
+    numberOfElements: 20
+}
+        </pre>
+
         <h3>Talk details</h3>
         <h4>Endpoint</h4>
         <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/{talkId}</pre></p>

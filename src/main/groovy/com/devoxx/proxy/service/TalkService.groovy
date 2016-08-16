@@ -82,6 +82,34 @@ class TalkService {
         }, pageRequest, talks.totalElements)
     }
 
+    Page<TalkListItem> findTalksByTrack(String trackId, boolean withVideo, Pageable pageRequest) {
+        Page<Talk> talks
+        if(withVideo) {
+            talks = talkRepository.findAllByTrackTrackIdAndYoutubeVideoIdNotNull(trackId, pageRequest)
+        } else {
+            talks = talkRepository.findAllByTrackTrackId(trackId, pageRequest)
+        }
+
+        return new PageImpl<TalkListItem>(talks.content.collect { talk ->
+            new TalkListItem(
+                    talkId: talk.talkId,
+                    title: talk.title,
+                    summary: talk.summary,
+                    talkType: talk.talkType,
+                    trackId: talk.track?.trackId,
+                    lang: talk.lang,
+                    averageRating: talk.averageRating,
+                    numberOfRatings: talk.numberOfRatings,
+                    youtubeVideoId: talk.youtubeVideoId,
+                    thumbnailUrl: talk.thumbnailUrl?.toString()?.replace('hqdefault', 'maxresdefault'),
+                    conferenceEventCode: talk.conference?.eventCode,
+                    speakerUuids: talk.speakers.collect {speaker -> speaker.businessId},
+                    speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
+                    trackTitle: talk.track?.title
+            )
+        }, pageRequest, talks.totalElements)
+    }
+
     List<TalkListItem> getTopTalks(boolean withVideo, int count) {
         List<Talk> talks
         if(withVideo) {
