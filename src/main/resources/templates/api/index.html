@@ -332,7 +332,7 @@
 
         <h3>Top rated talks</h3>
         <h4>Endpoint</h4>
-        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/top/withVideo=true&amp;count=10</pre></p>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/top?withVideo=true&amp;count=10</pre></p>
         <h4>Description</h4>
         <p>Loads the {count} highest rated talks with 30 votes or more (so only talks that do have a rating). You can filter
         out talks without a youtube video link by setting withVideo to true.</p>
@@ -400,7 +400,7 @@
 
         <h3>Search talks</h3>
         <h4>Endpoint</h4>
-        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/search/withVideo=true&amp;q=wrist</pre></p>
+        <p>GET <pre>http://devoxx-proxy.cfapps.io/api/talks/search?withVideo=true&amp;q=wrist</pre></p>
         <h4>Description</h4>
         <p>Searches all the talks for partial or complete matches of the search term or subwords of it (starting at 3 characters), in the following fields:</p>
         <ul>
