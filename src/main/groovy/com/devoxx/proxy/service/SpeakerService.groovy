@@ -26,11 +26,9 @@ class SpeakerService {
     Page<SpeakerListItem> getSpeakers(boolean withVideo, Pageable pageRequest = null) {
         log.info("Starting to load speakers from database...")
 
-        List<Speaker> speakers = speakerRepository.findAllByOrderByLastNameAsc()
+        List<Speaker> speakers = speakerRepository.findAllWithTalksByLastNameAsc()
 
         log.info("Loaded ${speakers.size()} speakers from database, now filtering...")
-
-        speakers = speakers.findAll {speaker -> speaker.talks?.size() > 0 && speaker.talks.find {talk-> withVideo ? talk.youtubeVideoId != null : true}}
 
         long totalSpeakers = speakers.size()
 
