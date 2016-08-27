@@ -21,6 +21,6 @@ interface SpeakerRepository extends CrudRepository<Speaker, Long>{
 
     List<Speaker> findAllByOrderByLastNameAsc()
 
-    @Query('select s from Speaker s inner join s.talks t where t.youtubeVideoId is not null order by s.lastName asc')
+    @Query('select distinct(s) from Speaker s inner join s.talks t where t.youtubeVideoId is not null order by s.lastName asc')
     List<Speaker> findAllWithTalksByLastNameAsc()
 }
