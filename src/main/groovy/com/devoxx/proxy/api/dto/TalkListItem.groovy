@@ -18,4 +18,5 @@ class TalkListItem {
     List<String> speakerUuids
     List<String> speakerNames
     String trackTitle
+    Long durationInSeconds
 }

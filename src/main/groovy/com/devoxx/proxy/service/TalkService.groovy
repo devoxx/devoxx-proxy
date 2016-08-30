@@ -77,7 +77,9 @@ class TalkService {
                     conferenceEventCode: talk.conference?.eventCode,
                     speakerUuids: talk.speakers.collect {speaker -> speaker.businessId},
                     speakerNames: talk.speakers.collect {speaker -> speaker.fullName},
-                    trackTitle: talk.track?.title
+                    trackTitle: talk.track?.title,
+                    durationInSeconds: talk.youtubeVideoDurationInSeconds
+
             )
         }, pageRequest, talks.totalElements)
     }
