@@ -86,7 +86,8 @@ class SpeakerService {
                             conferenceEventCode: talk.conference?.eventCode,
                             speakerUuids: talk.speakers.collect {spkr -> spkr.businessId},
                             speakerNames: talk.speakers.collect {spkr -> spkr.fullName},
-                            trackTitle: talk.track?.title
+                            trackTitle: talk.track?.title,
+                            durationInSeconds: talk.youtubeVideoDurationInSeconds
                     )
                 }.sort{it.title}
         )
