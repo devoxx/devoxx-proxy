@@ -6,6 +6,8 @@ import com.devoxx.proxy.api.dto.TalkListItem
 import com.devoxx.proxy.domain.Talk
 import com.devoxx.proxy.repository.TalkRepository
 import com.devoxx.proxy.repository.TalkSearch
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service
  */
 @Service
 class TalkService {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     TalkRepository talkRepository
 
@@ -144,8 +148,10 @@ class TalkService {
 
     List<TalkListItem> searchTalks(String text, boolean withVideo) {
         List<Talk> talks = talkSearch.search(text)
+        log.info("Found ${talks.size()} results for query [${text}]")
         if(withVideo) {
             talks = talks.findAll{talk->talk.youtubeVideoId != null}
+            log.info("Filtered ${talks.size()} results for query [${text}] with video")
         }
         return talks.collect { talk ->
             new TalkListItem(

@@ -56,6 +56,7 @@ class Talk {
     URL thumbnailUrl
     String youtubeVideoId
     Long youtubeVideoDurationInSeconds
+    Boolean youtubeVideoManuallyFixed = false
 
     @IndexedEmbedded @ManyToOne Track track
     @IndexedEmbedded @ManyToOne Conference conference

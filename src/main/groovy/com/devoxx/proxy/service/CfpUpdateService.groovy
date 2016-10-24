@@ -11,6 +11,7 @@ import com.devoxx.proxy.repository.TalkRepository
 import com.devoxx.proxy.repository.TrackRepository
 import com.devoxx.proxy.voting.Vote
 import com.devoxx.proxy.youtube.YoutubeVideo
+import org.hibernate.search.MassIndexer
 import org.hibernate.search.jpa.FullTextEntityManager
 import org.hibernate.search.jpa.Search
 import org.slf4j.Logger
@@ -190,10 +191,12 @@ class CfpUpdateService {
 
     private void updateYoutube(Talk talk, String youtubeChannelId) {
         def speakers = talk.speakers.collect { it.firstName + ' ' + it.lastName }.join("/")
-        def youtubeVideo = youtubeService.getYoutubeUrl("${talk.title} by $speakers", talk.talkType, youtubeChannelId)
-        if (youtubeVideo) {
-            talk.thumbnailUrl = new URL(youtubeVideo.thumbnailUrl)
-            talk.youtubeVideoId = youtubeVideo.videoId
+        if(!talk.youtubeVideoId && !talk.youtubeVideoManuallyFixed) {
+            def youtubeVideo = youtubeService.getYoutubeUrl("${talk.title} by $speakers", talk.talkType, youtubeChannelId)
+            if (youtubeVideo) {
+                talk.thumbnailUrl = new URL(youtubeVideo.thumbnailUrl)
+                talk.youtubeVideoId = youtubeVideo.videoId
+            }
         }
     }
 
@@ -269,7 +272,11 @@ class CfpUpdateService {
         try {
             FullTextEntityManager fullTextEntityManager =
                     Search.getFullTextEntityManager(entityManager);
-            fullTextEntityManager.createIndexer().startAndWait()
+            MassIndexer indexer = fullTextEntityManager.createIndexer()
+            indexer.purgeAllOnStart(true)
+                    .optimizeAfterPurge(true)
+                    .optimizeOnFinish(true)
+                    .startAndWait()
         } catch (InterruptedException e) {
             log.error("An error occurred trying to build the search index: " + e.toString());
         }
