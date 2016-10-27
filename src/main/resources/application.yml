@@ -16,8 +16,7 @@ spring:
       hibernate:
         search:
           default:
-            directory_provider: filesystem
-            indexBase: /tmp/tvoxx/
+            directory_provider: ram
 devoxx:
   cfpApis:
     -
